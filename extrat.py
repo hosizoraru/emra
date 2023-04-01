@@ -38,12 +38,12 @@ for filename in os.listdir(src_img_dir):
 subprocess.run(["./extract.erofs", "-i", "product.img", "-x", "-T16"])
 
 # 将排除的文件列表独立到一个文件中
-EXCLUDE_FILE_PATH = 'exclude_files.txt'
-exclude_files = []
+EXCLUDE_APK_PATH = 'exclude_apk.txt'
+exclude_apk = []
 
-if os.path.exists(EXCLUDE_FILE_PATH):
-    with open(EXCLUDE_FILE_PATH, 'r') as f:
-        exclude_files = [line.strip() for line in f.readlines()]
+if os.path.exists(EXCLUDE_APK_PATH):
+    with open(EXCLUDE_APK_PATH, 'r') as f:
+        exclude_apk = [line.strip() for line in f.readlines()]
 
 output_dir = 'output_apk'
 if not os.path.exists(output_dir):
@@ -51,7 +51,7 @@ if not os.path.exists(output_dir):
 
 for root, dirs, files in os.walk('.'):
     for file in files:
-        if file.endswith('.apk') and file not in exclude_files:
+        if file.endswith('.apk') and file not in exclude_apk:
             src = os.path.join(root, file)
             dst = os.path.join(output_dir, file)
             shutil.move(src, dst)
@@ -83,13 +83,13 @@ for apk_file in apk_files:
     os.rename(apk_path, os.path.join('output_apk', new_name))
 
 # 读取本地词典
-LOCAL_DICT_FILE = 'local_dict.json'
+APK_VERSION = 'app_version.json'
 
-if os.path.exists(LOCAL_DICT_FILE):
-    with open(LOCAL_DICT_FILE, 'r') as f:
-        local_dict = json.load(f)
+if os.path.exists(APK_VERSION):
+    with open(APK_VERSION, 'r') as f:
+        apk_version = json.load(f)
 else:
-    local_dict = {}
+    apk_version = {}
 
 # 遍历输出目录下的apk文件，并更新本地词典
 APK_DIR = 'output_apk'
@@ -97,32 +97,32 @@ APK_DIR = 'output_apk'
 for apk_file in os.listdir(APK_DIR):
     if apk_file.endswith('.apk'):
         x, y = os.path.splitext(apk_file)[0].split('^')
-        if x in local_dict:
-            if local_dict[x] > y:
-                print(f'更新 {x}：{local_dict[x]} -> {y}')
-                local_dict[x] = y
+        if x in apk_version:
+            if apk_version[x] > y:
+                print(f'更新 {x}：{apk_version[x]} -> {y}')
+                apk_version[x] = y
         else:
             print(f'添加 {x}:{y}')
-            local_dict[x] = y
+            apk_version[x] = y
 
 # 保存本地词典到json文件
-with open(LOCAL_DICT_FILE, 'w') as f:
-    json.dump(local_dict, f)
+with open(APK_VERSION, 'w') as f:
+    json.dump(apk_version, f)
 
 # 读取第二个词典并修改apk文件名
-SECOND_DICT_FILE = 'second_dict.json'
+APK_APP_NAME = 'app_name.json'
 
-if os.path.exists(SECOND_DICT_FILE):
-    with open(SECOND_DICT_FILE, 'r') as f:
-        second_dict = json.load(f)
+if os.path.exists(APK_APP_NAME):
+    with open(APK_APP_NAME, 'r') as f:
+        apk_name = json.load(f)
 else:
-    second_dict = {}
+    apk_name = {}
 
 for apk_file in os.listdir(APK_DIR):
     if apk_file.endswith('.apk'):
         x, y = os.path.splitext(apk_file)[0].split('^')
-        if x in second_dict:
-            new_x = second_dict[x]
+        if x in apk_name:
+            new_x = apk_name[x]
             new_apk_file = f'{new_x}_{y}.apk'
             os.rename(os.path.join(APK_DIR, apk_file),
                       os.path.join(APK_DIR, new_apk_file))
