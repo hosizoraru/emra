@@ -10,7 +10,7 @@ src_dir = os.path.abspath(__file__)
 
 if not os.path.exists("output_apk"):
     os.mkdir("output_apk")
-    
+
 if not os.path.exists("output_img"):
     os.mkdir("output_img")
 
@@ -26,14 +26,15 @@ zip_files = glob.glob("*.zip")
 
 for f in zip_files:
     subprocess.run(["unzip", f, "payload.bin"])
-    
-subprocess.run(["./payload-dumper-go", "-c", "8", "-output", "output_img", "-p", "product", "payload.bin"])
+
+subprocess.run(["./payload-dumper-go", "-c", "8", "-output",
+               "output_img", "-p", "product", "payload.bin"])
 
 for filename in os.listdir(src_img_dir):
     src_path = os.path.join(src_img_dir, filename)
     dst_path = os.path.join(dst_back_dir, filename)
     os.rename(src_path, dst_path)
-    
+
 subprocess.run(["./extract.erofs", "-i", "product.img", "-x", "-T16"])
 
 # 将排除的文件列表独立到一个文件中
@@ -54,7 +55,7 @@ for root, dirs, files in os.walk('.'):
             src = os.path.join(root, file)
             dst = os.path.join(output_dir, file)
             shutil.move(src, dst)
-            
+
 for root, dirs, files in os.walk(output_dir):
     for filename in fnmatch.filter(files, "*.apk"):
         if "Overlay" in filename or "_Sys" in filename:
@@ -123,6 +124,6 @@ for apk_file in os.listdir(APK_DIR):
         if x in second_dict:
             new_x = second_dict[x]
             new_apk_file = f'{new_x}_{y}.apk'
-            os.rename(os.path.join(APK_DIR, apk_file), os.path.join(APK_DIR, new_apk_file))
+            os.rename(os.path.join(APK_DIR, apk_file),
+                      os.path.join(APK_DIR, new_apk_file))
             print(f'修改 {apk_file} -> {new_apk_file}')
-
