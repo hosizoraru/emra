@@ -97,7 +97,7 @@ for apk_file in os.listdir(APK_DIR):
     if apk_file.endswith('.apk'):
         x, y = os.path.splitext(apk_file)[0].split('^')
         if x in local_dict:
-            if local_dict[x] != y:
+            if local_dict[x] > y:
                 print(f'更新 {x}：{local_dict[x]} -> {y}')
                 local_dict[x] = y
         else:
