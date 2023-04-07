@@ -4,6 +4,8 @@ import subprocess  # 导入subprocess模块，用于执行系统命令
 import fnmatch  # 导入fnmatch模块，用于文件名匹配
 import json  # 导入json模块，用于读写JSON格式的数据
 from apkfile import ApkFile  # 导入apkfile.py中定义的ApkFile类
+# import tkinter as tk
+# from tkinter import ttk
 
 
 def init_folder():
@@ -197,3 +199,58 @@ def main():
         else:
             print("输入非法，请重新输入")
 
+# def main():
+#     init_folder()
+#     exclude_apk, apk_version = init_json()
+#     root = tk.Tk()
+#     root.title("ROM 工具")
+
+#     # 创建选项列表
+#     options = [
+#         "从网上下载 ROM",
+#         "提取 payload.bin 文件",
+#         "解压 product.img 文件",
+#         "解压 EROFS 格式的 product.img 文件",
+#         "移除指定 APK 文件",
+#         "重命名 APK 文件",
+#         "更新 APK 文件名",
+#         "更新 APK 版本号",
+#         "退出程序"
+#     ]
+
+#     # 创建选择器
+#     choice_var = tk.StringVar(value=options[0])
+#     choice_label = ttk.Label(root, text="请选择一个操作：")
+#     choice_dropdown = ttk.Combobox(
+#         root, textvariable=choice_var, values=options)
+
+#     # 创建运行按钮
+#     def run_selected_operation():
+#         choice = choice_var.get()
+#         if choice == options[0]:
+#             download_rom(input("请输入ROM下载链接："))
+#         elif choice == options[1]:
+#             extract_payload_bin()
+#         elif choice == options[2]:
+#             extract_product_img()
+#         elif choice == options[3]:
+#             extract_erofs_product()
+#         elif choice == options[4]:
+#             remove_some_apk(exclude_apk)
+#         elif choice == options[5]:
+#             rename_apk()
+#         elif choice == options[6]:
+#             update_apk_name()
+#         elif choice == options[7]:
+#             update_apk_version(apk_version)
+#         else:
+#             root.destroy()
+
+#     run_button = ttk.Button(root, text="运行", command=run_selected_operation)
+
+#     # 将控件放置在主窗口中
+#     choice_label.pack(side="left")
+#     choice_dropdown.pack(side="left")
+#     run_button.pack(side="left")
+
+#     root.mainloop()
