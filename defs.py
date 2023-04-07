@@ -41,7 +41,7 @@ def download_rom(url):
     subprocess.run(["wget", url])
 
 
-def extract_payload_bin():
+def extract_payload_bin(zip_files):
     """从ZIP文件中提取payload.bin文件"""
     for f in zip_files:
         subprocess.run(["unzip", f, "payload.bin"])
@@ -86,7 +86,7 @@ def remove_some_apk(exclude_apk):
                 os.remove(os.path.join(root, filename))
 
 
-def rename_apk():
+def rename_apk(apk_files):
     # 遍历每个apk文件
     for apk_file in apk_files:
         apk_path = os.path.join(output_dir, apk_file)
@@ -118,7 +118,7 @@ def update_apk_version(apk_version):
             # 如果包名在本地词典中
             if x in apk_version:
                 # 如果本地词典中的版本号比当前版本号高
-                if apk_version[x] > y:
+                if apk_version[x] < y:
                     print(f'更新 {x}：{apk_version[x]} -> {y}')
                     # 更新本地词典中的版本号
                     apk_version[x] = y
@@ -172,15 +172,15 @@ def main():
         print("4 - 提取erofs镜像")
         print("5 - 删除指定的APK")
         print("6 - 重命名APK文件")
-        print("7 - 更新APK文件名")
-        print("8 - 更新APK版本")
+        print("7 - 更新APK版本")
+        print("8 - 更新APK文件名")
         print("0 - 退出程序")
 
         choice = input("请输入数字选择对应操作：")
         if choice == "1":
             download_rom(input("请输入ROM下载链接："))
         elif choice == "2":
-            extract_payload_bin()
+            extract_payload_bin(zip_files)
         elif choice == "3":
             extract_product_img()
         elif choice == "4":
@@ -188,11 +188,11 @@ def main():
         elif choice == "5":
             remove_some_apk(exclude_apk)
         elif choice == "6":
-            rename_apk()
+            rename_apk(apk_files)
         elif choice == "7":
-            update_apk_name()
-        elif choice == "8":
             update_apk_version(apk_version)
+        elif choice == "8":
+            update_apk_name()
         elif choice == "0":
             print("程序已终止")
             break
