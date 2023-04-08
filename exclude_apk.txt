@@ -25,7 +25,6 @@ MiDevAuthService.apk
 MiRadio.apk
 MiShop.apk
 MiVoiceOpti.apk
-MiuiBiometric3389.apk
 MiuiCit.apk
 MiuiSecCamService.apk
 ModuleMetadata.apk
@@ -40,6 +39,7 @@ RtkManager.apk
 SecurityOnetrackService.apk
 SettingsIntelligence.apk
 SmartHome.apk
+SmartHomePlus.apk
 TrichromeLibrary64.apk
 UwbUci.apk
 VoiceAssistAndroidT.apk

@@ -82,7 +82,7 @@ def remove_some_apk(exclude_apk):
     for root, _, files in os.walk(output_dir):
         for filename in fnmatch.filter(files, "*.apk"):
             # 判断文件名中是否包含"Overlay"或"_Sys"，若包含则删除该文件
-            if "Overlay" in filename or "_Sys" in filename:
+            if "Overlay" in filename or "_Sys" in filename or "MiuiBiometric" in filename:
                 os.remove(os.path.join(root, filename))
 
 
@@ -160,6 +160,24 @@ def update_apk_name():
                           os.path.join(output_dir, new_apk_file))
                 print(f'修改 {apk_file} -> {new_apk_file}')
 
+def delete_files_and_folders():
+    """删除指定的文件和文件夹"""
+    files_to_delete = ["payload.bin", "product.img"]
+    folders_to_delete = ["output_img", "config"]
+    
+    for file in files_to_delete:
+        if os.path.exists(file):
+            os.remove(file)
+            print(f"{file} 删除成功")
+        else:
+            print(f"{file} 不存在")
+            
+    for folder in folders_to_delete:
+        if os.path.exists(folder):
+            os.rmdir(folder)
+            print(f"{folder} 删除成功")
+        else:
+            print(f"{folder} 不存在")
 
 def main():
     while True:
@@ -174,6 +192,7 @@ def main():
         print("6 - 重命名APK文件")
         print("7 - 更新APK版本")
         print("8 - 更新APK文件名")
+        print("9 - 删除多余文件")
         print("0 - 退出程序")
 
         choice = input("请输入数字选择对应操作：")
@@ -193,6 +212,8 @@ def main():
             update_apk_version(apk_version)
         elif choice == "8":
             update_apk_name()
+        elif choice == "9":
+            delete_files_and_folders()
         elif choice == "0":
             print("程序已终止")
             break

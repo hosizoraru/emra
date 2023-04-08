@@ -13,6 +13,9 @@ zip_files = glob.glob("*.zip")
 # 创建名为"output_apk"的目录（如果它不存在）
 output_dir = 'output_apk'
 
+if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
 # 获取名为"output_apk"目录中所有以".apk"为后缀的文件列表
 apk_files = [f for f in os.listdir(output_dir) if f.endswith('.apk')]
 
