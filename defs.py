@@ -16,8 +16,14 @@ def init_folder():
     if not os.path.exists("output_img"):
         os.mkdir("output_img")
 
+    if not os.path.exists("update_apk"):
+        os.mkdir("update_apk")
+
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
+
+    if not os.path.exists(update_apk_folder):
+        os.makedirs(update_apk_folder)
 
 
 def init_json():
@@ -122,6 +128,11 @@ def update_apk_version(apk_version):
                     print(f'更新 {x}：{apk_version[x]} -> {y}')
                     # 更新本地词典中的版本号
                     apk_version[x] = y
+                    # 复制新版本的 APK 文件到 update_apk 文件夹
+                    src = os.path.join(output_dir, apk_file)
+                    dst = os.path.join(update_apk_folder, apk_file)
+                    shutil.copy2(src, dst)
+                    print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹')
             # 如果包名不在本地词典中
             else:
                 print(f'添加 {x}:{y}')
@@ -144,134 +155,39 @@ def update_apk_name():
     else:
         apk_name = {}
 
-    # 遍历输出目录下的apk文件
-    for apk_file in os.listdir(output_dir):
-        # 如果文件名以".apk"结尾
-        if apk_file.endswith('.apk'):
-            # 解析文件名，获取包名和版本号
-            x, y = os.path.splitext(apk_file)[0].split('^')
-            # 如果包名在第二个词典中
-            if x in apk_name:
-                new_x = apk_name[x]
-                # 构建新的文件名，包含新的应用名和原来的版本号
-                new_apk_file = f'{new_x}_{y}.apk'
-                # 重命名apk文件
-                os.rename(os.path.join(output_dir, apk_file),
-                          os.path.join(output_dir, new_apk_file))
-                print(f'修改 {apk_file} -> {new_apk_file}')
+    def rename_files_in_folder(folder):
+        for apk_file in os.listdir(folder):
+            if apk_file.endswith('.apk'):
+                x, y = os.path.splitext(apk_file)[0].split('^')
+                if x in apk_name:
+                    new_x = apk_name[x]
+                    new_apk_file = f'{new_x}_{y}.apk'
+                    os.rename(os.path.join(folder, apk_file),
+                              os.path.join(folder, new_apk_file))
+                    print(f'修改 {apk_file} -> {new_apk_file}')
+
+    # 重命名 output_dir 中的 APK 文件
+    rename_files_in_folder(output_dir)
+
+    # 重命名 update_apk 文件夹中的 APK 文件
+    rename_files_in_folder(update_apk_folder)
+
 
 def delete_files_and_folders():
     """删除指定的文件和文件夹"""
     files_to_delete = ["payload.bin", "product.img"]
-    folders_to_delete = ["output_img", "config"]
-    
+    folders_to_delete = ["output_img", "output_apk", "config"]
+
     for file in files_to_delete:
         if os.path.exists(file):
             os.remove(file)
             print(f"{file} 删除成功")
         else:
             print(f"{file} 不存在")
-            
+
     for folder in folders_to_delete:
         if os.path.exists(folder):
             os.rmdir(folder)
             print(f"{folder} 删除成功")
         else:
             print(f"{folder} 不存在")
-
-def main():
-    while True:
-        init_folder()
-        exclude_apk, apk_version = init_json()
-        print("请选择一个选项：")
-        print("1 - 下载ROM")
-        print("2 - 提取payload.bin")
-        print("3 - 提取product.img")
-        print("4 - 提取erofs镜像")
-        print("5 - 删除指定的APK")
-        print("6 - 重命名APK文件")
-        print("7 - 更新APK版本")
-        print("8 - 更新APK文件名")
-        print("9 - 删除多余文件")
-        print("0 - 退出程序")
-
-        choice = input("请输入数字选择对应操作：")
-        if choice == "1":
-            download_rom(input("请输入ROM下载链接："))
-        elif choice == "2":
-            extract_payload_bin(zip_files)
-        elif choice == "3":
-            extract_product_img()
-        elif choice == "4":
-            extract_erofs_product()
-        elif choice == "5":
-            remove_some_apk(exclude_apk)
-        elif choice == "6":
-            rename_apk(apk_files)
-        elif choice == "7":
-            update_apk_version(apk_version)
-        elif choice == "8":
-            update_apk_name()
-        elif choice == "9":
-            delete_files_and_folders()
-        elif choice == "0":
-            print("程序已终止")
-            break
-        else:
-            print("输入非法，请重新输入")
-
-# def main():
-#     init_folder()
-#     exclude_apk, apk_version = init_json()
-#     root = tk.Tk()
-#     root.title("ROM 工具")
-
-#     # 创建选项列表
-#     options = [
-#         "从网上下载 ROM",
-#         "提取 payload.bin 文件",
-#         "解压 product.img 文件",
-#         "解压 EROFS 格式的 product.img 文件",
-#         "移除指定 APK 文件",
-#         "重命名 APK 文件",
-#         "更新 APK 文件名",
-#         "更新 APK 版本号",
-#         "退出程序"
-#     ]
-
-#     # 创建选择器
-#     choice_var = tk.StringVar(value=options[0])
-#     choice_label = ttk.Label(root, text="请选择一个操作：")
-#     choice_dropdown = ttk.Combobox(
-#         root, textvariable=choice_var, values=options)
-
-#     # 创建运行按钮
-#     def run_selected_operation():
-#         choice = choice_var.get()
-#         if choice == options[0]:
-#             download_rom(input("请输入ROM下载链接："))
-#         elif choice == options[1]:
-#             extract_payload_bin()
-#         elif choice == options[2]:
-#             extract_product_img()
-#         elif choice == options[3]:
-#             extract_erofs_product()
-#         elif choice == options[4]:
-#             remove_some_apk(exclude_apk)
-#         elif choice == options[5]:
-#             rename_apk()
-#         elif choice == options[6]:
-#             update_apk_name()
-#         elif choice == options[7]:
-#             update_apk_version(apk_version)
-#         else:
-#             root.destroy()
-
-#     run_button = ttk.Button(root, text="运行", command=run_selected_operation)
-
-#     # 将控件放置在主窗口中
-#     choice_label.pack(side="left")
-#     choice_dropdown.pack(side="left")
-#     run_button.pack(side="left")
-
-#     root.mainloop()
