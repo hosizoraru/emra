@@ -4,8 +4,6 @@ import subprocess  # 导入subprocess模块，用于执行系统命令
 import fnmatch  # 导入fnmatch模块，用于文件名匹配
 import json  # 导入json模块，用于读写JSON格式的数据
 from apkfile import ApkFile  # 导入apkfile.py中定义的ApkFile类
-# import tkinter as tk
-# from tkinter import ttk
 
 
 def init_folder():
@@ -176,7 +174,7 @@ def update_apk_name():
 def delete_files_and_folders():
     """删除指定的文件和文件夹"""
     files_to_delete = ["payload.bin", "product.img"]
-    folders_to_delete = ["output_img", "output_apk", "config"]
+    folders_to_delete = ["output_img", "output_apk", "update_apk", "config"]
 
     for file in files_to_delete:
         if os.path.exists(file):
