@@ -1,4 +1,4 @@
-# EMRA - Extract, Modify, Rename APKs
+# EMRA - Extract, MIUI, Rename APKs
 
 EMRA 是一个用于提取、修改和重命名 Android ROM 中的 APK 文件的 Python 脚本。它可以帮助开发者和用户轻松地获取 APK 文件，并根据需要对其进行定制。
 
