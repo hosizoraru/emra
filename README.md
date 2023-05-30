@@ -39,4 +39,4 @@ EMRA 是一个用于提取、修改和重命名 Android ROM 中的 APK 文件的
 
 ## 许可证
 
-本项目基于 [MIT License](https://opensource.org/licenses/MIT) 许可。
+本项目基于 [WTFPL License](https://github.com/rpherrera/WTFPL/blob/master/LICENSE) 许可。
