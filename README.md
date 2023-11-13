@@ -16,7 +16,7 @@ EMRA 是一个用于提取、修改和重命名 Android ROM 中的 APK 文件的
 
 ## 如何使用
 
-1. 确保已安装 Python 3.x，并安装以下依赖库：
+1. 确保已安装 Python 3.x，并安装以下依赖库和 Android 的 `aapt`：
     ```
     pip install apkfile
     ```
@@ -27,8 +27,8 @@ EMRA 是一个用于提取、修改和重命名 Android ROM 中的 APK 文件的
     ```
 
 3. 从以下仓库中下载并解压得到 `extract.erofs` 和 `payload-dumper-go` 文件，并将文件移动到 emra 脚本目录下
-- [extract.erofs](https://github.com/sekaiacg/erofs-utils/releases)
-- [payload-dumper-go](https://github.com/ssut/payload-dumper-go/releases)
+   - [extract.erofs](https://github.com/sekaiacg/erofs-utils/releases)
+   - [payload-dumper-go](https://github.com/ssut/payload-dumper-go/releases)
 
 4. 授予文件权限并初始化运行脚本：
     ```
@@ -41,7 +41,7 @@ EMRA 是一个用于提取、修改和重命名 Android ROM 中的 APK 文件的
     python main.py
     ```
 
-4. 按照 `main.py -h` 的提示选择相应的操作。
+4. 按照 `python main.py -h` 的提示选择相应的操作。
 
 ## 贡献
 
