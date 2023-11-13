@@ -95,20 +95,26 @@ def rename_apk(apk_files):
     for apk_file in apk_files:
         apk_path = os.path.join(output_dir, apk_file)
 
-        # 使用apkfile库读取apk包信息
-        apk = ApkFile(apk_path)
+        try:
+            # 使用apkfile库读取apk包信息
+            apk = ApkFile(apk_path)
 
-        # 获取apk的包名和版本号
-        package_name = apk.package_name
-        version_name = apk.version_name
-        # version_code
-        # version_code = apk.version_code
+            # 获取apk的包名和版本号
+            package_name = apk.package_name
+            version_name = apk.version_name
+            # version_code
+            # version_code = apk.version_code
 
-        # 构建新文件名
-        new_name = f"{package_name}^{version_name}.apk"
+            # 构建新文件名
+            new_name = f"{package_name}^{version_name}.apk"
 
-        # 重命名apk文件
-        os.rename(apk_path, os.path.join(output_dir, new_name))
+            # 重命名apk文件
+            os.rename(apk_path, os.path.join(output_dir, new_name))
+        except FileNotFoundError as e:
+            print('异常：缺失 aapt 环境，请先安装依赖后再重试')
+            break
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
 
 # 定义更新apk版本的函数，遍历输出目录下的apk文件，并更新本地词典
@@ -174,7 +180,7 @@ def update_apk_name():
 def delete_files_and_folders():
     """删除指定的文件和文件夹"""
     files_to_delete = ["payload.bin", "product.img"]
-    folders_to_delete = ["output_img", "output_apk", "update_apk", "config"]
+    folders_to_delete = ["output_img", "output_apk", "update_apk", "config", "product"]
 
     for file in files_to_delete:
         if os.path.exists(file):
