@@ -23,19 +23,29 @@ EMRA 是一个用于提取、修改和重命名 Android ROM 中的 APK 文件的
 
 2. 克隆此仓库或下载脚本文件：
     ```
-    git clone https://github.com/hosizoraru/emra.git
+    git clone https://github.com/mu7220/emra.git
     ```
 
-3. 运行脚本：
+3. 从以下仓库中下载并解压得到 `extract.erofs` 和 `payload-dumper-go` 文件，并将文件移动到 emra 脚本目录下
+- [extract.erofs](https://github.com/sekaiacg/erofs-utils/releases)
+- [payload-dumper-go](https://github.com/ssut/payload-dumper-go/releases)
+
+4. 授予文件权限并初始化运行脚本：
+    ```
+    chmod -X 755 extract.erofs
+    ```
+    ```
+    chmod -X 755 payload-dumper-go
+    ```
     ```
     python main.py
     ```
 
-4. 按照提示选择相应的操作。
+4. 按照 `main.py -h` 的提示选择相应的操作。
 
 ## 贡献
 
-欢迎向该项目提出改进建议或提交错误报告。请通过 [GitHub Issues](https://github.com/hosizoraru/emra/issues) 提交。
+欢迎向该项目提出改进建议或提交错误报告。请通过 [GitHub Issues](https://github.com/mu7220/emra/issues) 提交。
 
 ## 许可证
 

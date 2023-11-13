@@ -178,14 +178,24 @@ def delete_files_and_folders():
 
     for file in files_to_delete:
         if os.path.exists(file):
-            os.remove(file)
-            print(f"{file} 删除成功")
+            try:
+                os.remove(file)
+                print(f"{file} 删除成功")
+            except OSError as e:
+                print(f"无法删除 {file}: {e}")
+
         else:
             print(f"{file} 不存在")
 
     for folder in folders_to_delete:
         if os.path.exists(folder):
-            os.rmdir(folder)
-            print(f"{folder} 删除成功")
+            if os.path.isdir(folder):
+                try:
+                    shutil.rmtree(folder)
+                    print(f"{folder} 删除成功")
+                except OSError as e:
+                    print(f"无法删除 {folder}: {e}")
+            else:
+                print(f"{folder} 不是文件夹")
         else:
             print(f"{folder} 不存在")
