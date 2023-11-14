@@ -1,10 +1,13 @@
 AnalyticsCore.apk
 AndroidPlatformServices.apk
+CatchLog.apk
 ConferenceDialer.apk
 ConfigUpdater.apk
 DeviceConfig.apk
+DeviceInfoQR.apk
 FidoAuthen.apk
-FidoAuthen.apk
+FidoAuthen2.apk
+FusedLocationProvider.apk
 GeoLocation.apk
 GmsCore.apk
 GoogleExtShared.apk
@@ -12,7 +15,6 @@ GoogleLocationHistory.apk
 GoogleOneTimeInitializer.apk
 GooglePlayServicesUpdater.apk
 GooglePrintRecommendationService.apk
-InCallUI.apk
 MIUIDuokanReader.apk
 MIUIGameCenter.apk
 MIUIMiCloudSync.apk

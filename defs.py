@@ -86,7 +86,7 @@ def remove_some_apk(exclude_apk):
     for root, _, files in os.walk(output_dir):
         for filename in fnmatch.filter(files, "*.apk"):
             # 判断文件名中是否包含"Overlay"或"_Sys"，若包含则删除该文件
-            if "Overlay" in filename or "_Sys" in filename or "MiuiBiometric" in filename:
+            if "overlay" in filename.lower() or "_Sys" in filename or "MiuiBiometric" in filename:
                 os.remove(os.path.join(root, filename))
 
 
@@ -114,7 +114,7 @@ def rename_apk(apk_files):
             print('异常：缺失 aapt 环境，请先安装依赖后再重试')
             break
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"异常，报错信息: {e}")
 
 
 # 定义更新apk版本的函数，遍历输出目录下的apk文件，并更新本地词典
