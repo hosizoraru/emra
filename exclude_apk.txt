@@ -1,5 +1,6 @@
 AnalyticsCore.apk
 AndroidPlatformServices.apk
+Biometric.apk
 CatchLog.apk
 ConferenceDialer.apk
 ConfigUpdater.apk
@@ -15,6 +16,7 @@ GoogleLocationHistory.apk
 GoogleOneTimeInitializer.apk
 GooglePlayServicesUpdater.apk
 GooglePrintRecommendationService.apk
+MIUIBiometric.apk
 MIUIDuokanReader.apk
 MIUIGameCenter.apk
 MIUIMiCloudSync.apk
@@ -26,6 +28,7 @@ MiAONService_L1.apk
 MiDevAuthService.apk
 MiRadio.apk
 MiShop.apk
+MiTrustService.apk
 MiVoiceOpti.apk
 MiuiCit.apk
 MiuiSecCamService.apk
@@ -36,12 +39,14 @@ OTrPBroker.apk
 OtaProvision.apk
 PowerOffAlarm.apk
 QxwzLocationService.apk
+RegService.apk
 RideModeAudio.apk
 RtkManager.apk
 SecurityOnetrackService.apk
 SettingsIntelligence.apk
 SmartHome.apk
 SmartHomePlus.apk
+SwitchAccess.apk
 TrichromeLibrary64.apk
 UwbUci.apk
 VoiceAssistAndroidT.apk

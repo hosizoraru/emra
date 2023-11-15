@@ -86,7 +86,7 @@ def remove_some_apk(exclude_apk):
     for root, _, files in os.walk(output_dir):
         for filename in fnmatch.filter(files, "*.apk"):
             # 判断文件名中是否包含"Overlay"或"_Sys"，若包含则删除该文件
-            if "overlay" in filename.lower() or "_Sys" in filename or "MiuiBiometric" in filename:
+            if "overlay" in filename.lower() or "_Sys" in filename:
                 os.remove(os.path.join(root, filename))
 
 
