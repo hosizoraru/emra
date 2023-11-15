@@ -32,10 +32,10 @@ EMRA 是一个用于提取、修改和重命名 Android ROM 中的 APK 文件的
 
 4. 授予文件权限并初始化运行脚本：
     ```
-    chmod -X 755 extract.erofs
+    chmod -X extract.erofs
     ```
     ```
-    chmod -X 755 payload-dumper-go
+    chmod -X payload-dumper-go
     ```
     ```
     python main.py
