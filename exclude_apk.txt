@@ -6,6 +6,7 @@ ConferenceDialer.apk
 ConfigUpdater.apk
 DeviceConfig.apk
 DeviceInfoQR.apk
+EidService.apk
 FidoAuthen.apk
 FidoAuthen2.apk
 FusedLocationProvider.apk
@@ -16,6 +17,7 @@ GoogleLocationHistory.apk
 GoogleOneTimeInitializer.apk
 GooglePlayServicesUpdater.apk
 GooglePrintRecommendationService.apk
+IFAAService.apk
 MIUIBiometric.apk
 MIUIDuokanReader.apk
 MIUIGameCenter.apk
@@ -33,6 +35,7 @@ MiVoiceOpti.apk
 MiuiCit.apk
 MiuiSecCamService.apk
 ModuleMetadata.apk
+Music.apk
 NQNfcNci-v1.apk
 NQNfcNci.apk
 OTrPBroker.apk
@@ -46,6 +49,7 @@ SecurityOnetrackService.apk
 SettingsIntelligence.apk
 SmartHome.apk
 SmartHomePlus.apk
+SoterService.apk
 SwitchAccess.apk
 TrichromeLibrary64.apk
 UwbUci.apk
