@@ -27,4 +27,5 @@ apk_files = [f for f in os.listdir(output_dir) if f.endswith('.apk')]
 # 定义了两个字符串常量，分别用于指定排除APK的文件路径和APK版本号和名称的JSON文件路径
 EXCLUDE_APK_PATH = 'exclude_apk.txt'
 APK_VERSION = 'app_version.json'
+APK_CODE = 'app_code.json'
 APK_APP_NAME = 'app_name.json'

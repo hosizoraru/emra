@@ -28,6 +28,7 @@ def init_json():
     """初始化排除APK列表和APK版本号字典"""
     exclude_apk = []
     apk_version = {}
+    apk_code = {}
     if os.path.exists(EXCLUDE_APK_PATH):
         with open(EXCLUDE_APK_PATH, 'r') as f:
             exclude_apk = [line.strip() for line in f.readlines()]
@@ -37,7 +38,13 @@ def init_json():
             apk_version = json.load(f)
     else:
         apk_version = {}
-    return exclude_apk, apk_version
+    
+    if os.path.exists(APK_CODE):
+        with open(APK_CODE, 'r') as f:
+            apk_code = json.load(f)
+    else:
+        apk_code = {}
+    return exclude_apk, apk_version, apk_code
 
 
 def download_rom(url):
@@ -103,13 +110,14 @@ def rename_apk(apk_files):
             package_name = apk.package_name
             version_name = apk.version_name
             # version_code
-            # version_code = apk.version_code
+            version_code = apk.version_code
 
             # 构建新文件名
-            new_name = f"{package_name}^{version_name}.apk"
+            new_name = f"{package_name}^{version_name}^{version_code}.apk"
 
             # 重命名apk文件
-            os.rename(apk_path, os.path.join(output_dir, new_name))
+            if not os.path.exists(os.path.join(output_dir, new_name)):
+                os.rename(apk_path, os.path.join(output_dir, new_name))
         except FileNotFoundError as e:
             print('异常：缺失 aapt 环境，请先安装依赖后再重试')
             break
@@ -118,30 +126,42 @@ def rename_apk(apk_files):
 
 
 # 定义更新apk版本的函数，遍历输出目录下的apk文件，并更新本地词典
-def update_apk_version(apk_version):
+def update_apk_version(apk_version, apk_code):
     # 遍历输出目录下的apk文件
     for apk_file in os.listdir(output_dir):
         # 如果文件名以".apk"结尾
         if apk_file.endswith('.apk'):
             # 解析文件名，获取包名和版本号
-            x, y = os.path.splitext(apk_file)[0].split('^')
+            x, y, z = os.path.splitext(apk_file)[0].split('^')
             # 如果包名在本地词典中
-            if x in apk_version:
+            if x in apk_code:
                 # 如果本地词典中的版本号比当前版本号高
-                if apk_version[x] < y:
-                    print(f'更新 {x}：{apk_version[x]} -> {y}')
+                if apk_code[x] < z:
+                    print(f'更新 {x}：{apk_code[x]} -> {z}')
                     # 更新本地词典中的版本号
                     apk_version[x] = y
+                    apk_code[x] = z
                     # 复制新版本的 APK 文件到 update_apk 文件夹
                     src = os.path.join(output_dir, apk_file)
                     dst = os.path.join(update_apk_folder, apk_file)
                     shutil.copy2(src, dst)
                     print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹')
+                elif apk_code[x] == z:
+                    if apk_version[x] != y:
+                         print(f'更新 {x}：{apk_version[x]} -> {y}')
+                         # 更新本地词典中的版本
+                         apk_version[x] = y
+                         # 复制新版本的 APK 文件到 update_apk 文件夹
+                         src = os.path.join(output_dir, apk_file)
+                         dst = os.path.join(update_apk_folder, apk_file)
+                         shutil.copy2(src, dst)
+                         print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹')
             # 如果包名不在本地词典中
             else:
-                print(f'添加 {x}:{y}')
+                print(f'添加 {x}:{y}:{z}')
                 # 在本地词典中添加新的包名和版本号
                 apk_version[x] = y
+                apk_code[x] = z
 
     # 保存本地词典到json文件
     with open(APK_VERSION, 'w') as f:

@@ -9,7 +9,6 @@ DeviceInfoQR.apk
 EidService.apk
 FidoAuthen.apk
 FidoAuthen2.apk
-FusedLocationProvider.apk
 GeoLocation.apk
 GmsCore.apk
 GoogleExtShared.apk
