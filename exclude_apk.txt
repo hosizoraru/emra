@@ -25,6 +25,7 @@ MIUINewHome_Removable.apk
 MIUIPrivacyComputing.apk
 MIUIYoupin.apk
 MSA.apk
+MiAONService.apk
 MiAONService_L1.apk
 MiDevAuthService.apk
 MiRadio.apk
