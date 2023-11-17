@@ -182,7 +182,7 @@ def update_apk_name():
     def rename_files_in_folder(folder):
         for apk_file in os.listdir(folder):
             if apk_file.endswith('.apk'):
-                x, y = os.path.splitext(apk_file)[0].split('^')
+                x, y, z = os.path.splitext(apk_file)[0].split('^')
                 if x in apk_name:
                     new_x = apk_name[x]
                     new_apk_file = f'{new_x}_{y}.apk'
