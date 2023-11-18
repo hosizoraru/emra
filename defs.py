@@ -140,7 +140,7 @@ def update_apk_version(apk_version, apk_code):
                     print(f'更新 {x}：{apk_code[x]} -> {z}')
                     # 更新本地词典中的版本号
                     apk_version[x] = y
-                    apk_code[x] = z
+                    apk_code[x] = int(z) # 以 int 格式写入
                     # 复制新版本的 APK 文件到 update_apk 文件夹
                     src = os.path.join(output_dir, apk_file)
                     dst = os.path.join(update_apk_folder, apk_file)
