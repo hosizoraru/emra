@@ -136,17 +136,19 @@ def update_apk_version(apk_version, apk_code):
             # 如果包名在本地词典中
             if x in apk_code:
                 # 如果本地词典中的版本号比 Apk 记录的版本号低
-                if int(apk_code[x]) < int(z):
+                if apk_code[x] < int(z):
                     print(f'更新 {x}：{apk_code[x]} -> {z}')
                     # 更新本地词典中的版本号
+                    print(f'Before update - {x}: apk_code={apk_code[x]}, z={z}') #debug
                     apk_version[x] = y
                     apk_code[x] = z
+                    print(f'After update - {x}: apk_code={apk_code[x]}, z={z}') #debug
                     # 复制新版本的 APK 文件到 update_apk 文件夹
                     src = os.path.join(output_dir, apk_file)
                     dst = os.path.join(update_apk_folder, apk_file)
                     shutil.copy2(src, dst)
                     print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹')
-                elif int(apk_code[x]) == int(z):
+                elif apk_code[x] == int(z):
                     if apk_version[x] != y:
                          print(f'疑似更新 {x}：{apk_version[x]} -> {y}')
                          # 更新本地词典中的版本
