@@ -140,7 +140,7 @@ def update_apk_version(apk_version, apk_code):
                     print(f'更新 {x}：{apk_code[x]} -> {z}')
                     # 更新本地词典中的版本号
                     apk_version[x] = y
-                    apk_code[x] = z
+                    apk_code[x] = int(z)  # 尝试修改为整数
                     # 复制新版本的 APK 文件到 update_apk 文件夹
                     src = os.path.join(output_dir, apk_file)
                     dst = os.path.join(update_apk_folder, apk_file)
@@ -148,7 +148,7 @@ def update_apk_version(apk_version, apk_code):
                     print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹')
                 elif apk_code[x] == z:
                     if apk_version[x] != y:
-                         print(f'更新 {x}：{apk_version[x]} -> {y}')
+                         print(f'疑似更新 {x}：{apk_version[x]} -> {y}')
                          # 更新本地词典中的版本
                          apk_version[x] = y
                          # 复制新版本的 APK 文件到 update_apk 文件夹
