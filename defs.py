@@ -139,10 +139,8 @@ def update_apk_version(apk_version, apk_code):
                 if apk_code[x] < int(z):
                     print(f'更新 {x}：{apk_code[x]} -> {z}')
                     # 更新本地词典中的版本号
-                    print(f'Before update - {x}: apk_code={apk_code[x]}, z={z}') #debug
                     apk_version[x] = y
                     apk_code[x] = z
-                    print(f'After update - {x}: apk_code={apk_code[x]}, z={z}') #debug
                     # 复制新版本的 APK 文件到 update_apk 文件夹
                     src = os.path.join(output_dir, apk_file)
                     dst = os.path.join(update_apk_folder, apk_file)
@@ -168,6 +166,8 @@ def update_apk_version(apk_version, apk_code):
     # 保存本地词典到json文件
     with open(APK_VERSION, 'w') as f:
         json.dump(apk_version, f)
+    with open(APK_CODE, 'w') as f:
+        json.dump(apk_code, f)
 
 # 定义更新apk文件名的函数，读取第二个词典并修改apk文件名
 
@@ -181,22 +181,27 @@ def update_apk_name():
     else:
         apk_name = {}
 
-    def rename_files_in_folder(folder):
+    def rename_files_in_folder(folder, name_dict):
         for apk_file in os.listdir(folder):
+            # 如果文件名以".apk"结尾
             if apk_file.endswith('.apk'):
+                # 解析文件名，获取包名和版本号
                 x, y, z = os.path.splitext(apk_file)[0].split('^')
-                if x in apk_name:
-                    new_x = apk_name[x]
+                # 如果解析的文件名在字典里
+                if x in name_dict:
+                    # 定义修改的文件名
+                    new_x = name_dict[x]
                     new_apk_file = f'{new_x}_{y}.apk'
+                    # 修改为新定义的文件名
                     os.rename(os.path.join(folder, apk_file),
                               os.path.join(folder, new_apk_file))
                     print(f'修改 {apk_file} -> {new_apk_file}')
 
     # 重命名 output_dir 中的 APK 文件
-    rename_files_in_folder(output_dir)
+    rename_files_in_folder(output_dir, apk_name)
 
     # 重命名 update_apk 文件夹中的 APK 文件
-    rename_files_in_folder(update_apk_folder)
+    rename_files_in_folder(update_apk_folder, apk_name)
 
 
 def delete_files_and_folders():
