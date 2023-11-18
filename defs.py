@@ -28,6 +28,9 @@ def init_folder():
 
     if not os.path.exists(update_apk_name_folder):
         os.makedirs(update_apk_name_folder)
+    
+    with open(APK_CODE_NAME, 'w') as file:
+        json.dump({}, file)
 
 
 def init_json():
@@ -35,22 +38,24 @@ def init_json():
     exclude_apk = []
     apk_version = {}
     apk_code = {}
+    apk_code_name = {}
+    # 查询 APK 排除列表
     if os.path.exists(EXCLUDE_APK_PATH):
         with open(EXCLUDE_APK_PATH, 'r') as f:
             exclude_apk = [line.strip() for line in f.readlines()]
-
+    # 查询本地字典版本名
     if os.path.exists(APK_VERSION):
         with open(APK_VERSION, 'r') as f:
             apk_version = json.load(f)
     else:
         apk_version = {}
-    
+    # 查询本地字典版本号
     if os.path.exists(APK_CODE):
         with open(APK_CODE, 'r') as f:
             apk_code = json.load(f)
     else:
         apk_code = {}
-    return exclude_apk, apk_version, apk_code
+    return exclude_apk, apk_version, apk_code, apk_code_name
 
 
 def download_rom(url):
@@ -132,7 +137,7 @@ def rename_apk(apk_files):
 
 
 # 定义更新apk版本的函数，遍历输出目录下的apk文件，并更新本地词典
-def update_apk_version(apk_version, apk_code):
+def update_apk_version(apk_version, apk_code, apk_code_name):
     # 遍历输出目录下的apk文件
     for apk_file in os.listdir(output_dir):
         # 如果文件名以".apk"结尾
@@ -144,14 +149,25 @@ def update_apk_version(apk_version, apk_code):
                 # 如果本地词典中的版本号比 Apk 记录的版本号低
                 if apk_code[x] < int(z):
                     print(f'更新 {x}：{apk_code[x]} -> {z}')
-                    # 更新本地词典中的版本号
-                    apk_version[x] = y
-                    apk_code[x] = int(z) # 以 int 格式写入
-                    # 复制新版本的 APK 文件到 update_apk 文件夹
-                    src = os.path.join(output_dir, apk_file)
-                    dst = os.path.join(update_apk_folder, apk_file)
-                    shutil.copy2(src, dst)
-                    print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹')
+                    if apk_version[x] == y:
+                        # 更新本地词典中的版本号
+                        apk_version[x] = y
+                        apk_code[x] = int(z) # 以 int 格式写入
+                        apk_code_name = int(z) # 以 int 格式写入
+                        # 复制新版本的 APK 文件到 update_apk 文件夹
+                        src = os.path.join(output_dir, apk_file)
+                        dst = os.path.join(update_apk_folder, apk_file)
+                        shutil.copy2(src, dst)
+                        print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹')
+                    else:
+                        # 更新本地词典中的版本号
+                        apk_version[x] = y
+                        apk_code[x] = int(z) # 以 int 格式写入
+                        # 复制新版本的 APK 文件到 update_apk 文件夹
+                        src = os.path.join(output_dir, apk_file)
+                        dst = os.path.join(update_apk_folder, apk_file)
+                        shutil.copy2(src, dst)
+                        print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹')
                 elif apk_code[x] == int(z):
                     if apk_version[x] != y:
                          print(f'疑似更新 {x}：{apk_version[x]} -> {y}')
@@ -174,6 +190,8 @@ def update_apk_version(apk_version, apk_code):
         json.dump(apk_version, f)
     with open(APK_CODE, 'w') as f:
         json.dump(apk_code, f)
+    with open(APK_CODE_NAME, 'w') as f:
+        json.dump(apk_code_name, f)
 
 # 定义更新apk文件名的函数，读取第二个词典并修改apk文件名
 
@@ -187,7 +205,15 @@ def update_apk_name():
     else:
         apk_name = {}
 
-    def rename_files_in_folder(folder, name_dict):
+    # 如果临时词典文件存在，则读取其中的内容
+    if os.path.exists(APK_CODE_NAME):
+        with open(APK_CODE_NAME, 'r') as f:
+            apk_code_name = json.load(f)
+    # 如果临时词典文件不存在，则将其设为空字典
+    else:
+        apk_code_name = {}
+
+    def rename_files_in_folder(folder, name_dict, code_dict):
         for apk_file in os.listdir(folder):
             # 如果文件名以".apk"结尾
             if apk_file.endswith('.apk'):
@@ -195,27 +221,32 @@ def update_apk_name():
                 x, y, z = os.path.splitext(apk_file)[0].split('^')
                 # 如果解析的文件名在字典里
                 if x in name_dict:
-                    # 定义修改的文件名
-                    new_x = name_dict[x]
-                    new_apk_file = f'{new_x}_{y}.apk'
+                    if x in code_dict:
+                        # 定义修改的文件名
+                        new_x = name_dict[x]
+                        new_apk_file = f'{new_x}_{y}({z}).apk'
+                    else:
+                        # 定义修改的文件名
+                        new_x = name_dict[x]
+                        new_apk_file = f'{new_x}_{y}.apk'
                     # 修改为新定义的文件名
                     os.rename(os.path.join(folder, apk_file),
                               os.path.join(folder, new_apk_file))
                     print(f'修改 {apk_file} -> {new_apk_file}')
 
     # 重命名 output_dir 中的 APK 文件
-    rename_files_in_folder(output_dir, apk_name)
+    rename_files_in_folder(output_dir, apk_name, apk_code_name)
 
     # 重命名 update_apk 文件夹中的 APK 文件
-    rename_files_in_folder(update_apk_folder, apk_name)
+    rename_files_in_folder(update_apk_folder, apk_name, apk_code_name)
 
     # 重命名 update_name_apk 文件夹中的 APK 文件
-    rename_files_in_folder(update_apk_name_folder, apk_name)
+    rename_files_in_folder(update_apk_name_folder, apk_name, apk_code_name)
 
 
 def delete_files_and_folders():
     """删除指定的文件和文件夹"""
-    files_to_delete = ["payload.bin", "product.img"]
+    files_to_delete = ["payload.bin", "product.img", "app_code_name.json"]
     folders_to_delete = ["output_img", "output_apk", "update_apk", "update_name_apk", "config", "product"]
 
     for file in files_to_delete:

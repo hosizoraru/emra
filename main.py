@@ -33,7 +33,7 @@ def main():
     args = parse_arguments()
 
     init_folder()
-    exclude_apk, apk_version, apk_code = init_json()
+    exclude_apk, apk_version, apk_code, apk_code_name = init_json()
 
     if args.download:
         download_rom(args.download)
@@ -48,7 +48,7 @@ def main():
     if args.rename:
         rename_apk(apk_files)
     if args.update_version:
-        update_apk_version(apk_version, apk_code)
+        update_apk_version(apk_version, apk_code, apk_code_name)
     if args.update_name:
         update_apk_name()
     if args.clean:
