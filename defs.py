@@ -161,7 +161,7 @@ def update_apk_version(apk_version, apk_code):
                 print(f'添加 {x}:{y}:{z}')
                 # 在本地词典中添加新的包名和版本号
                 apk_version[x] = y
-                apk_code[x] = z
+                apk_code[x] = int(z) # 以 int 格式写入
 
     # 保存本地词典到json文件
     with open(APK_VERSION, 'w') as f:
