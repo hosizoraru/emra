@@ -17,11 +17,17 @@ def init_folder():
     if not os.path.exists("update_apk"):
         os.mkdir("update_apk")
 
+    if not os.path.exists("update_name_apk"):
+        os.mkdir("update_name_apk")
+
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
     if not os.path.exists(update_apk_folder):
         os.makedirs(update_apk_folder)
+
+    if not os.path.exists(update_apk_name_folder):
+        os.makedirs(update_apk_name_folder)
 
 
 def init_json():
@@ -151,14 +157,14 @@ def update_apk_version(apk_version, apk_code):
                          print(f'疑似更新 {x}：{apk_version[x]} -> {y}')
                          # 更新本地词典中的版本
                          apk_version[x] = y
-                         # 复制新版本的 APK 文件到 update_apk 文件夹
+                         # 复制新版本的 APK 文件到 update_name_apk 文件夹
                          src = os.path.join(output_dir, apk_file)
-                         dst = os.path.join(update_apk_folder, apk_file)
+                         dst = os.path.join(update_apk_name_folder, apk_file)
                          shutil.copy2(src, dst)
-                         print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹')
+                         print(f'已将 {apk_file} 复制到 {update_apk_name_folder} 文件夹')
             # 如果包名不在本地词典中
             else:
-                print(f'添加 {x}:{y}:{z}')
+                print(f'添加新应用 {x}:{y}({z})')
                 # 在本地词典中添加新的包名和版本号
                 apk_version[x] = y
                 apk_code[x] = int(z) # 以 int 格式写入
@@ -203,11 +209,14 @@ def update_apk_name():
     # 重命名 update_apk 文件夹中的 APK 文件
     rename_files_in_folder(update_apk_folder, apk_name)
 
+    # 重命名 update_name_apk 文件夹中的 APK 文件
+    rename_files_in_folder(update_apk_name_folder, apk_name)
+
 
 def delete_files_and_folders():
     """删除指定的文件和文件夹"""
     files_to_delete = ["payload.bin", "product.img"]
-    folders_to_delete = ["output_img", "output_apk", "update_apk", "config", "product"]
+    folders_to_delete = ["output_img", "output_apk", "update_apk", "update_name_apk", "config", "product"]
 
     for file in files_to_delete:
         if os.path.exists(file):

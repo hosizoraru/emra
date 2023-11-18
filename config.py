@@ -15,8 +15,13 @@ output_dir = 'output_apk'
 
 update_apk_folder = "update_apk"
 
+update_apk_name_folder = "update_name_apk"
+
 if not os.path.exists(update_apk_folder):
     os.makedirs(update_apk_folder)
+
+if not os.path.exists(update_apk_name_folder):
+    os.makedirs(update_apk_name_folder)
 
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
