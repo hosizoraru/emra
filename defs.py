@@ -28,9 +28,6 @@ def init_folder():
 
     if not os.path.exists(update_apk_name_folder):
         os.makedirs(update_apk_name_folder)
-    
-    with open(APK_CODE_NAME, 'w') as file:
-        json.dump({}, file)
 
 
 def init_json():
@@ -224,15 +221,19 @@ def update_apk_name():
                     if x in code_dict:
                         # 定义修改的文件名
                         new_x = name_dict[x]
-                        new_apk_file = f'{new_x}_{y}({z}).apk'
+                        new_apk_file_1 = f'{new_x}_{y}({z}).apk'
+                        # 修改为新定义的文件名
+                        os.rename(os.path.join(folder, apk_file),
+                                 os.path.join(folder, new_apk_file_1))
+                        print(f'修改 {apk_file} -> {new_apk_file_1}')
                     else:
                         # 定义修改的文件名
                         new_x = name_dict[x]
-                        new_apk_file = f'{new_x}_{y}.apk'
-                    # 修改为新定义的文件名
-                    os.rename(os.path.join(folder, apk_file),
-                              os.path.join(folder, new_apk_file))
-                    print(f'修改 {apk_file} -> {new_apk_file}')
+                        new_apk_file_2 = f'{new_x}_{y}.apk'
+                        # 修改为新定义的文件名
+                        os.rename(os.path.join(folder, apk_file),
+                                 os.path.join(folder, new_apk_file_2))
+                        print(f'修改 {apk_file} -> {new_apk_file_2}')
 
     # 重命名 output_dir 中的 APK 文件
     rename_files_in_folder(output_dir, apk_name, apk_code_name)
