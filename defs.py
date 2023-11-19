@@ -98,11 +98,11 @@ def extract_erofs_product():
                 if device_name == pad:
                     print("\n检测到包设备为 Pad")
                     break
-                else:
-                   for fold in is_fold: 
-                       if device_name == fold:
-                           print("\n检测到包设备为 Fold")
-                           break
+            else:
+                for fold in is_fold: 
+                    if device_name == fold:
+                        print("\n检测到包设备为 Fold")
+                        break
 
 def move_json(backup, type_name):
     def move_files(type_n):
