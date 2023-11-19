@@ -97,10 +97,12 @@ def extract_erofs_product():
             for pad in is_pad:
                 if device_name == pad:
                     print("\n检测到包设备为 Pad")
+                    break
                 else:
                    for fold in is_fold: 
                        if device_name == fold:
                            print("\n检测到包设备为 Fold")
+                           break
 
 def move_json(backup, type_name):
     # 获取字典库当前列表
@@ -157,6 +159,7 @@ def move_json(backup, type_name):
                     print(f"异常: {e}")
         
         # 同步字典库
+        print(f"Attempting to move JSON with backup={backup}, type_name={type_name}") #debug
         if backup == 1:
             print(f"正在同步到 {line} 字典库目录")
             if line == "Phone":
