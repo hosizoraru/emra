@@ -4,6 +4,7 @@ Biometric.apk
 CatchLog.apk
 ConferenceDialer.apk
 ConfigUpdater.apk
+CloudConfig.apk
 DeviceConfig.apk
 DeviceInfoQR.apk
 EidService.apk
@@ -17,9 +18,13 @@ GoogleOneTimeInitializer.apk
 GooglePlayServicesUpdater.apk
 GooglePrintRecommendationService.apk
 IFAAService.apk
+MipayService.apk
+MiuiBiometric.apk
 MIUIBiometric.apk
 MIUIDuokanReader.apk
+MIUIDuokanReaderPad.apk
 MIUIGameCenter.apk
+MIUIGameCenterPad.apk
 MIUIMiCloudSync.apk
 MIUINewHome_Removable.apk
 MIUIPrivacyComputing.apk
@@ -30,6 +35,7 @@ MiAONService_L1.apk
 MiDevAuthService.apk
 MiRadio.apk
 MiShop.apk
+MiShopPad.apk
 MiTrustService.apk
 MiVoiceOpti.apk
 MiuiCit.apk
@@ -40,6 +46,7 @@ NQNfcNci-v1.apk
 NQNfcNci.apk
 OTrPBroker.apk
 OtaProvision.apk
+OtaProvisionPad.apk
 PowerOffAlarm.apk
 QxwzLocationService.apk
 RegService.apk

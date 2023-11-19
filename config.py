@@ -36,3 +36,5 @@ APK_CODE = 'app_code.json'
 APK_APP_NAME = 'app_name.json'
 # 定义一个临时字典，用于存储版本名相同但版本号有所变更的 APK
 APK_CODE_NAME = 'app_code_name.json'
+# 定义字典类型
+JSON_V = 'app_json.txt'
