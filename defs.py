@@ -106,15 +106,14 @@ def extract_erofs_product():
 
 def move_json(backup, type_name):
     def move_files(type_n):
-            print(f"Attempting to move JSON with type_n={type_n}") #debug
             if type_n == "ph":
                 src_1 = os.path.join("./phone", "app_version.json")
                 dst_1 = os.path.join(".", "app_version.json")
                 src_2 = os.path.join("./phone", "app_code.json")
                 dst_2 = os.path.join(".", "app_code.json")
-                # 将文件移动到根目录下
-                shutil.move(src_1, dst_1)
-                shutil.move(src_2, dst_2)
+                # 将文件复制到根目录下
+                shutil.copy2(src_1, dst_1)
+                shutil.copy2(src_2, dst_2)
                 try:
                     with open(JSON_V, 'w') as file:
                         new_content = "Phone"
@@ -127,9 +126,9 @@ def move_json(backup, type_name):
                 dst_1 = os.path.join(".", "app_version.json")
                 src_2 = os.path.join("./fold", "app_code.json")
                 dst_2 = os.path.join(".", "app_code.json")
-                # 将文件移动到根目录下
-                shutil.move(src_1, dst_1)
-                shutil.move(src_2, dst_2)
+                # 将文件复制到根目录下
+                shutil.copy2(src_1, dst_1)
+                shutil.copy2(src_2, dst_2)
                 try:
                     with open(JSON_V, 'w') as file:
                         new_content = "Fold"
@@ -142,9 +141,9 @@ def move_json(backup, type_name):
                 dst_1 = os.path.join(".", "app_version.json")
                 src_2 = os.path.join("./pad", "app_code.json")
                 dst_2 = os.path.join(".", "app_code.json")
-                # 将文件移动到根目录下
-                shutil.move(src_1, dst_1)
-                shutil.move(src_2, dst_2)
+                # 将文件复制到根目录下
+                shutil.copy2(src_1, dst_1)
+                shutil.copy2(src_2, dst_2)
                 try:
                     with open(JSON_V, 'w') as file:
                         new_content = "Pad"
@@ -160,7 +159,6 @@ def move_json(backup, type_name):
             print("当前字典列表为:", line)
         
         # 同步字典库
-        print(f"Attempting to move JSON with backup={backup}, type_name={type_name}") #debug
         if int(backup) == 1:
             print(f"正在同步到 {line} 字典库目录")
             if line == "Phone":
@@ -196,8 +194,8 @@ def move_json(backup, type_name):
         elif int(backup) == 0:
             print("正在覆盖字典库目录")
             move_files(type_name)
-    except FileNotFoundError:
-        print(f"异常，找不到文件: {JSON_V}")
+    except FileNotFoundError as e:
+        print(f"异常，找不到文件: {e}")
     except Exception as e:
         print(f"异常: {e}")
 
