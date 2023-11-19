@@ -105,51 +105,7 @@ def extract_erofs_product():
                            break
 
 def move_json(backup, type_name):
-    # 获取字典库当前列表
-    try:
-        with open(JSON_V, 'r') as file:
-            line = file.readline()
-            print("当前字典列表为:", line)
-        
-        # 同步字典库
-        print(f"Attempting to move JSON with backup={backup}, type_name={type_name}") #debug
-        if int(backup) == 1:
-            print(f"正在同步到 {line} 字典库目录")
-            if line == "Phone":
-                src_1 = os.path.join(".", "app_version.json")
-                dst_1 = os.path.join("./phone", "app_version.json")
-                src_2 = os.path.join(".", "app_code.json")
-                dst_2 = os.path.join("./phone", "app_code.json")
-                # 将文件移动到 phone 目录下
-                shutil.move(src_1, dst_1)
-                shutil.move(src_2, dst_2)
-                print("字典库已同步到 phone 目录，正在切换")
-                move_files(type_name)
-            elif line == "Fold":
-                src_1 = os.path.join(".", "app_version.json")
-                dst_1 = os.path.join("./fold", "app_version.json")
-                src_2 = os.path.join(".", "app_code.json")
-                dst_2 = os.path.join("./fold", "app_code.json")
-                # 将文件移动到 fold 目录下
-                shutil.move(src_1, dst_1)
-                shutil.move(src_2, dst_2)
-                print("字典库已同步到 fold 目录，正在切换")
-                move_files(type_name)
-            elif line == "Pad":
-                src_1 = os.path.join(".", "app_version.json")
-                dst_1 = os.path.join("./pad", "app_version.json")
-                src_2 = os.path.join(".", "app_code.json")
-                dst_2 = os.path.join("./pad", "app_code.json")
-                # 将文件移动到 pad 目录下
-                shutil.move(src_1, dst_1)
-                shutil.move(src_2, dst_2)
-                print("字典库已同步到 pad 目录，正在切换")
-                move_files(type_name)
-        elif int(backup) == 0:
-            print("正在覆盖字典库目录")
-            move_files(type_name)
-
-        def move_files(type_n):
+    def move_files(type_n):
             print(f"Attempting to move JSON with type_n={type_n}") #debug
             if type_n == "ph":
                 src_1 = os.path.join("./phone", "app_version.json")
@@ -196,6 +152,50 @@ def move_json(backup, type_name):
                         print("字典库已变更为 Pad")
                 except Exception as e:
                     print(f"异常: {e}")
+
+    # 获取字典库当前列表
+    try:
+        with open(JSON_V, 'r') as file:
+            line = file.readline()
+            print("当前字典列表为:", line)
+        
+        # 同步字典库
+        print(f"Attempting to move JSON with backup={backup}, type_name={type_name}") #debug
+        if int(backup) == 1:
+            print(f"正在同步到 {line} 字典库目录")
+            if line == "Phone":
+                src_1 = os.path.join(".", "app_version.json")
+                dst_1 = os.path.join("./phone", "app_version.json")
+                src_2 = os.path.join(".", "app_code.json")
+                dst_2 = os.path.join("./phone", "app_code.json")
+                # 将文件移动到 phone 目录下
+                shutil.move(src_1, dst_1)
+                shutil.move(src_2, dst_2)
+                print("字典库已同步到 phone 目录，正在切换")
+                move_files(type_name)
+            elif line == "Fold":
+                src_1 = os.path.join(".", "app_version.json")
+                dst_1 = os.path.join("./fold", "app_version.json")
+                src_2 = os.path.join(".", "app_code.json")
+                dst_2 = os.path.join("./fold", "app_code.json")
+                # 将文件移动到 fold 目录下
+                shutil.move(src_1, dst_1)
+                shutil.move(src_2, dst_2)
+                print("字典库已同步到 fold 目录，正在切换")
+                move_files(type_name)
+            elif line == "Pad":
+                src_1 = os.path.join(".", "app_version.json")
+                dst_1 = os.path.join("./pad", "app_version.json")
+                src_2 = os.path.join(".", "app_code.json")
+                dst_2 = os.path.join("./pad", "app_code.json")
+                # 将文件移动到 pad 目录下
+                shutil.move(src_1, dst_1)
+                shutil.move(src_2, dst_2)
+                print("字典库已同步到 pad 目录，正在切换")
+                move_files(type_name)
+        elif int(backup) == 0:
+            print("正在覆盖字典库目录")
+            move_files(type_name)
     except FileNotFoundError:
         print(f"异常，找不到文件: {JSON_V}")
     except Exception as e:
