@@ -5,105 +5,6 @@ import fnmatch  # 导入fnmatch模块，用于文件名匹配
 import json  # 导入json模块，用于读写JSON格式的数据
 from apkfile import ApkFile  # 导入apkfile.py中定义的ApkFile类
 
-
-def init_folder():
-    """检查并创建所需的文件夹"""
-    if not os.path.exists("output_apk"):
-        os.mkdir("output_apk")
-
-    if not os.path.exists("output_img"):
-        os.mkdir("output_img")
-
-    if not os.path.exists("update_apk"):
-        os.mkdir("update_apk")
-
-    if not os.path.exists("update_name_apk"):
-        os.mkdir("update_name_apk")
-
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
-    if not os.path.exists(update_apk_folder):
-        os.makedirs(update_apk_folder)
-
-    if not os.path.exists(update_apk_name_folder):
-        os.makedirs(update_apk_name_folder)
-
-
-def init_json():
-    """初始化排除APK列表和APK版本号字典"""
-    exclude_apk = []
-    apk_version = {}
-    apk_code = {}
-    apk_code_name = {}
-    # 查询 APK 排除列表
-    if os.path.exists(EXCLUDE_APK_PATH):
-        with open(EXCLUDE_APK_PATH, 'r') as f:
-            exclude_apk = [line.strip() for line in f.readlines()]
-    # 查询本地字典版本名
-    if os.path.exists(APK_VERSION):
-        with open(APK_VERSION, 'r') as f:
-            apk_version = json.load(f)
-    else:
-        apk_version = {}
-    # 查询本地字典版本号
-    if os.path.exists(APK_CODE):
-        with open(APK_CODE, 'r') as f:
-            apk_code = json.load(f)
-    else:
-        apk_code = {}
-    return exclude_apk, apk_version, apk_code, apk_code_name
-
-
-def download_rom(url):
-    """从给定的URL下载ROM"""
-    subprocess.run(["wget", url])
-
-
-def extract_payload_bin(zip_files):
-    """从ZIP文件中提取payload.bin文件"""
-    for f in zip_files:
-        subprocess.run(["unzip", f, "payload.bin"])
-
-
-def extract_product_img():
-    # 使用subprocess模块运行shell命令，执行payload-dumper-go的命令，从payload.bin文件中提取product镜像文件
-    # -c参数指定最大并发数为8，-output指定提取后的文件输出到output_img目录下
-    # -p参数指定提取product镜像，"payload.bin"为输入文件
-    subprocess.run(["./payload-dumper-go", "-c", "8", "-output",
-                    "output_img", "-p", "product", "payload.bin"])
-
-    # 循环遍历output_img目录下的所有文件，执行os.rename函数将提取的文件移动到当前目录下
-    for filename in os.listdir("output_img"):
-        src_path = os.path.join("output_img", filename)
-        dst_path = os.path.join(".", filename)
-        os.rename(src_path, dst_path)
-
-
-def extract_erofs_product():
-    # 使用subprocess模块运行shell命令，执行extract.erofs的命令，提取product.img镜像文件中的文件
-    # -i参数指定输入的镜像文件为product.img，-x参数指定提取文件，-T16参数指定使用16个线程提取文件
-    subprocess.run(["./extract.erofs", "-i", "product.img", "-x", "-T16"])
-
-    # 获取设备代号
-    for root, _, files in os.walk("./product/etc/device_features/"):
-        for filename in fnmatch.filter(files, "*.xml"): 
-            device_name = os.path.splitext(filename)[0]
-
-            # 建立一个表单，用来判断是否为 Fold 或者 Pad
-            is_fold = {"cetus", "zizhan", "babylon"}
-            is_pad = {"nabu", "elish", "enuma", "dagu", "pipa", "liuqin", "yudi", "yunluo", "xun"}
-
-            for pad in is_pad:
-                if device_name == pad:
-                    print("\n检测到包设备为 Pad")
-                    break
-            else:
-                for fold in is_fold: 
-                    if device_name == fold:
-                        print("\n检测到包设备为 Fold")
-                        break
-
 def move_json(backup, type_name):
     def move_files(type_n):
             if type_n == "ph":
@@ -198,6 +99,109 @@ def move_json(backup, type_name):
         print(f"异常，找不到文件: {e}")
     except Exception as e:
         print(f"异常: {e}")
+
+def init_folder():
+    """检查并创建所需的文件夹"""
+    if not os.path.exists("output_apk"):
+        os.mkdir("output_apk")
+
+    if not os.path.exists("output_img"):
+        os.mkdir("output_img")
+
+    if not os.path.exists("update_apk"):
+        os.mkdir("update_apk")
+
+    if not os.path.exists("update_name_apk"):
+        os.mkdir("update_name_apk")
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    if not os.path.exists(update_apk_folder):
+        os.makedirs(update_apk_folder)
+
+    if not os.path.exists(update_apk_name_folder):
+        os.makedirs(update_apk_name_folder)
+    
+    if not os.path.exists(APK_CODE) or not os.path.exists(APK_VERSION):
+        print("检测到根目录下没有字典库，正在初始化字典库为 Phone")
+        move_json(0, "ph")
+        print("如有更换字典库需要，请使用 -j 命令进行切换")
+
+
+def init_json():
+    """初始化排除APK列表和APK版本号字典"""
+    exclude_apk = []
+    apk_version = {}
+    apk_code = {}
+    apk_code_name = {}
+    # 查询 APK 排除列表
+    if os.path.exists(EXCLUDE_APK_PATH):
+        with open(EXCLUDE_APK_PATH, 'r') as f:
+            exclude_apk = [line.strip() for line in f.readlines()]
+    # 查询本地字典版本名
+    if os.path.exists(APK_VERSION):
+        with open(APK_VERSION, 'r') as f:
+            apk_version = json.load(f)
+    else:
+        apk_version = {}
+    # 查询本地字典版本号
+    if os.path.exists(APK_CODE):
+        with open(APK_CODE, 'r') as f:
+            apk_code = json.load(f)
+    else:
+        apk_code = {}
+    return exclude_apk, apk_version, apk_code, apk_code_name
+
+
+def download_rom(url):
+    """从给定的URL下载ROM"""
+    subprocess.run(["wget", url])
+
+
+def extract_payload_bin(zip_files):
+    """从ZIP文件中提取payload.bin文件"""
+    for f in zip_files:
+        subprocess.run(["unzip", f, "payload.bin"])
+
+
+def extract_product_img():
+    # 使用subprocess模块运行shell命令，执行payload-dumper-go的命令，从payload.bin文件中提取product镜像文件
+    # -c参数指定最大并发数为8，-output指定提取后的文件输出到output_img目录下
+    # -p参数指定提取product镜像，"payload.bin"为输入文件
+    subprocess.run(["./payload-dumper-go", "-c", "8", "-output",
+                    "output_img", "-p", "product", "payload.bin"])
+
+    # 循环遍历output_img目录下的所有文件，执行os.rename函数将提取的文件移动到当前目录下
+    for filename in os.listdir("output_img"):
+        src_path = os.path.join("output_img", filename)
+        dst_path = os.path.join(".", filename)
+        os.rename(src_path, dst_path)
+
+
+def extract_erofs_product():
+    # 使用subprocess模块运行shell命令，执行extract.erofs的命令，提取product.img镜像文件中的文件
+    # -i参数指定输入的镜像文件为product.img，-x参数指定提取文件，-T16参数指定使用16个线程提取文件
+    subprocess.run(["./extract.erofs", "-i", "product.img", "-x", "-T16"])
+
+    # 获取设备代号
+    for root, _, files in os.walk("./product/etc/device_features/"):
+        for filename in fnmatch.filter(files, "*.xml"): 
+            device_name = os.path.splitext(filename)[0]
+
+            # 建立一个表单，用来判断是否为 Fold 或者 Pad
+            is_fold = {"cetus", "zizhan", "babylon"}
+            is_pad = {"nabu", "elish", "enuma", "dagu", "pipa", "liuqin", "yudi", "yunluo", "xun"}
+
+            for pad in is_pad:
+                if device_name == pad:
+                    print("\n检测到包设备为 Pad")
+                    break
+            else:
+                for fold in is_fold: 
+                    if device_name == fold:
+                        print("\n检测到包设备为 Fold")
+                        break
 
 def remove_some_apk(exclude_apk):
     # 遍历当前目录及其子目录
