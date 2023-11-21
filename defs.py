@@ -257,49 +257,53 @@ def update_apk_version(apk_version, apk_code, apk_code_name):
         # 如果文件名以".apk"结尾
         if apk_file.endswith('.apk'):
             # 解析文件名，获取包名和版本号
-            x, y, z = os.path.splitext(apk_file)[0].split('^')
-            # 如果包名在本地词典中
-            if x in apk_code:
-                # 如果本地词典中的版本号比 Apk 记录的版本号低
-                if apk_code[x] < int(z):
-                    print(f'更新 {x}：{apk_code[x]} -> {z}')
-                    if apk_version[x] == y:
-                        # 更新本地词典中的版本号
-                        apk_version[x] = y
-                        apk_code[x] = int(z) # 以 int 格式写入
-                        apk_code_name[x] = int(z) # 以 int 格式写入
-                        # 复制新版本的 APK 文件到 update_apk 文件夹
-                        src = os.path.join(output_dir, apk_file)
-                        dst = os.path.join(update_apk_folder, apk_file)
-                        shutil.copy2(src, dst)
-                        print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹')
-                    else:
-                        # 更新本地词典中的版本号
-                        apk_version[x] = y
-                        apk_code[x] = int(z) # 以 int 格式写入
-                        # 复制新版本的 APK 文件到 update_apk 文件夹
-                        src = os.path.join(output_dir, apk_file)
-                        dst = os.path.join(update_apk_folder, apk_file)
-                        shutil.copy2(src, dst)
-                        print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹')
-                elif apk_code[x] == int(z):
-                    if apk_version[x] != y:
-                         print(f'疑似更新 {x}：{apk_version[x]} -> {y}')
-                         # 更新本地词典中的版本
-                         if apk_version[x] > y:
+            try:
+                x, y, z = os.path.splitext(apk_file)[0].split('^')
+                # 如果包名在本地词典中
+                if x in apk_code:
+                    # 如果本地词典中的版本号比 Apk 记录的版本号低
+                    if apk_code[x] < int(z):
+                        print(f'更新 {x}：{apk_code[x]} -> {z}')
+                        if apk_version[x] == y:
+                            # 更新本地词典中的版本号
                             apk_version[x] = y
-                            print("已将疑似更新同步到字典库中")
-                         # 复制新版本的 APK 文件到 update_name_apk 文件夹
-                         src = os.path.join(output_dir, apk_file)
-                         dst = os.path.join(update_apk_name_folder, apk_file)
-                         shutil.copy2(src, dst)
-                         print(f'已将 {apk_file} 复制到 {update_apk_name_folder} 文件夹')
-            # 如果包名不在本地词典中
-            else:
-                print(f'添加新应用 {x}:{y}({z})')
-                # 在本地词典中添加新的包名和版本号
-                apk_version[x] = y
-                apk_code[x] = int(z) # 以 int 格式写入
+                            apk_code[x] = int(z) # 以 int 格式写入
+                            apk_code_name[x] = int(z) # 以 int 格式写入
+                            # 复制新版本的 APK 文件到 update_apk 文件夹
+                            src = os.path.join(output_dir, apk_file)
+                            dst = os.path.join(update_apk_folder, apk_file)
+                            shutil.copy2(src, dst)
+                            print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹')
+                        else:
+                            # 更新本地词典中的版本号
+                            apk_version[x] = y
+                            apk_code[x] = int(z) # 以 int 格式写入
+                            # 复制新版本的 APK 文件到 update_apk 文件夹
+                            src = os.path.join(output_dir, apk_file)
+                            dst = os.path.join(update_apk_folder, apk_file)
+                            shutil.copy2(src, dst)
+                            print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹')
+                    elif apk_code[x] == int(z):
+                        if apk_version[x] != y:
+                            print(f'疑似更新 {x}：{apk_version[x]} -> {y}')
+                            # 更新本地词典中的版本
+                            if apk_version[x] > y:
+                                apk_version[x] = y
+                                print("已将疑似更新同步到字典库中")
+                            # 复制新版本的 APK 文件到 update_name_apk 文件夹
+                            src = os.path.join(output_dir, apk_file)
+                            dst = os.path.join(update_apk_name_folder, apk_file)
+                            shutil.copy2(src, dst)
+                            print(f'已将 {apk_file} 复制到 {update_apk_name_folder} 文件夹')
+                # 如果包名不在本地词典中
+                else:
+                    print(f'添加新应用 {x}:{y}({z})')
+                    # 在本地词典中添加新的包名和版本号
+                    apk_version[x] = y
+                    apk_code[x] = int(z) # 以 int 格式写入
+            except Exception as e:
+                print(f"异常，报错信息: {e}")
+                return
 
     # 保存本地词典到json文件
     with open(APK_VERSION, 'w') as f:
