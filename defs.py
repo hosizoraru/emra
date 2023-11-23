@@ -286,10 +286,6 @@ def update_apk_version(apk_version, apk_code, apk_code_name):
                     elif apk_code[x] == int(z):
                         if apk_version[x] != y:
                             print(f'疑似更新 {x}：{apk_version[x]} -> {y}')
-                            # 更新本地词典中的版本
-                            if apk_version[x] > y:
-                                apk_version[x] = y
-                                print("已将疑似更新同步到字典库中")
                             # 复制新版本的 APK 文件到 update_name_apk 文件夹
                             src = os.path.join(output_dir, apk_file)
                             dst = os.path.join(update_apk_name_folder, apk_file)
