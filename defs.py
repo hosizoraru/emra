@@ -191,7 +191,7 @@ def extract_erofs_product():
 
             # 建立一个表单，用来判断是否为 Fold 或者 Pad
             is_fold = {"cetus", "zizhan", "babylon"}
-            is_pad = {"nabu", "elish", "enuma", "dagu", "pipa", "liuqin", "yudi", "yunluo", "xun"}
+            is_pad = {"nabu", "elish", "enuma", "dagu", "pipa", "liuqin", "yudi", "yunluo", "xun", "sheng"}
 
             for pad in is_pad:
                 if device_name == pad:
@@ -273,7 +273,7 @@ def update_apk_version(apk_version, apk_code, apk_code_name):
                             src = os.path.join(output_dir, apk_file)
                             dst = os.path.join(update_apk_folder, apk_file)
                             shutil.copy2(src, dst)
-                            print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹')
+                            print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹\n')
                         else:
                             # 更新本地词典中的版本号
                             apk_version[x] = y
@@ -282,7 +282,7 @@ def update_apk_version(apk_version, apk_code, apk_code_name):
                             src = os.path.join(output_dir, apk_file)
                             dst = os.path.join(update_apk_folder, apk_file)
                             shutil.copy2(src, dst)
-                            print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹')
+                            print(f'已将 {apk_file} 复制到 {update_apk_folder} 文件夹\n')
                     elif apk_code[x] == int(z):
                         if apk_version[x] != y:
                             print(f'疑似更新 {x}：{apk_version[x]} -> {y}')
@@ -290,10 +290,10 @@ def update_apk_version(apk_version, apk_code, apk_code_name):
                             src = os.path.join(output_dir, apk_file)
                             dst = os.path.join(update_apk_name_folder, apk_file)
                             shutil.copy2(src, dst)
-                            print(f'已将 {apk_file} 复制到 {update_apk_name_folder} 文件夹')
+                            print(f'已将 {apk_file} 复制到 {update_apk_name_folder} 文件夹\n')
                 # 如果包名不在本地词典中
                 else:
-                    print(f'添加新应用 {x}:{y}({z})')
+                    print(f'添加新应用 {x}:{y}({z})\n')
                     # 在本地词典中添加新的包名和版本号
                     apk_version[x] = y
                     apk_code[x] = int(z) # 以 int 格式写入
