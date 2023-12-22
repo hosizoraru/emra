@@ -70,7 +70,7 @@ def move_json(backup, type_name):
                 # 将文件移动到 phone 目录下
                 shutil.move(src_1, dst_1)
                 shutil.move(src_2, dst_2)
-                print("字典库已同步到 phone 目录，正在切换")
+                print("字典库已同步到 Phone 目录，正在切换")
                 move_files(type_name)
             elif line == "Fold":
                 src_1 = os.path.join(".", "app_version.json")
@@ -80,7 +80,7 @@ def move_json(backup, type_name):
                 # 将文件移动到 fold 目录下
                 shutil.move(src_1, dst_1)
                 shutil.move(src_2, dst_2)
-                print("字典库已同步到 fold 目录，正在切换")
+                print("字典库已同步到 Fold 目录，正在切换")
                 move_files(type_name)
             elif line == "Pad":
                 src_1 = os.path.join(".", "app_version.json")
@@ -90,7 +90,7 @@ def move_json(backup, type_name):
                 # 将文件移动到 pad 目录下
                 shutil.move(src_1, dst_1)
                 shutil.move(src_2, dst_2)
-                print("字典库已同步到 pad 目录，正在切换")
+                print("字典库已同步到 Pad 目录，正在切换")
                 move_files(type_name)
         elif int(backup) == 0:
             print("正在覆盖字典库目录")
@@ -162,17 +162,23 @@ def download_rom(url):
 def extract_payload_bin(zip_files):
     """从ZIP文件中提取payload.bin文件"""
     for f in zip_files:
-        subprocess.run(["unzip", f, "payload.bin"])
+        try:
+            subprocess.run(["unzip", "{}".format(f), "payload.bin"])
+        except FileNotFoundError as e:
+            print('异常：unzip 命令执行存在问题，请先检查运行环境后重试')
+            break
+        except Exception as e:
+            print(f"异常，报错信息: {e}")
 
 
 def extract_product_img():
-    # 使用subprocess模块运行shell命令，执行payload-dumper-go的命令，从payload.bin文件中提取product镜像文件
-    # -c参数指定最大并发数为8，-output指定提取后的文件输出到output_img目录下
-    # -p参数指定提取product镜像，"payload.bin"为输入文件
+    # 使用 subprocess 模块运行 shell 命令，执行 payload-dumper-go 的命令，从 payload.bin 文件中提取 product 镜像文件
+    # -c 参数指定最大并发数为 8，-output 指定提取后的文件输出到 output_img 目录下
+    # -p 参数指定提取 product 镜像，"payload.bin" 为输入文件
     subprocess.run(["./payload-dumper-go", "-c", "8", "-output",
                     "output_img", "-p", "product", "payload.bin"])
 
-    # 循环遍历output_img目录下的所有文件，执行os.rename函数将提取的文件移动到当前目录下
+    # 循环遍历 output_img 目录下的所有文件，执行 os.rename 函数将提取的文件移动到当前目录下
     for filename in os.listdir("output_img"):
         src_path = os.path.join("output_img", filename)
         dst_path = os.path.join(".", filename)
@@ -180,9 +186,13 @@ def extract_product_img():
 
 
 def extract_erofs_product():
-    # 使用subprocess模块运行shell命令，执行extract.erofs的命令，提取product.img镜像文件中的文件
-    # -i参数指定输入的镜像文件为product.img，-x参数指定提取文件，-T16参数指定使用16个线程提取文件
-    subprocess.run(["./extract.erofs", "-i", "product.img", "-x", "-T16"])
+    try:
+        # 使用 subprocess 模块运行 shell 命令，执行 extract.erofs 的命令，提取 product.img 镜像文件中的文件
+        # -i 参数指定输入的镜像文件为 product.img，-x 参数指定提取文件，-T16 参数指定使用 16 个线程提取文件
+        subprocess.run(["./extract.erofs", "-i", "product.img", "-x", "-T16"])
+    except Exception as e:
+        print("该镜像不是 erofs 压缩格式，无法解包")
+        return
 
     # 获取设备代号
     for root, _, files in os.walk("./product/etc/device_features/"):
@@ -212,14 +222,20 @@ def remove_some_apk(exclude_apk):
                 src = os.path.join(root, file)
                 dst = os.path.join(output_dir, file)
                 # 将文件移动到output_dir目录下
-                shutil.move(src, dst)
+                try:
+                    shutil.move(src, dst)
+                except PermissionError:
+                    print(f"无法移动文件 {src}，请检查你的文件权限或关闭占用该文件的程序。")
 
     # 遍历output_dir目录及其子目录
     for root, _, files in os.walk(output_dir):
         for filename in fnmatch.filter(files, "*.apk"):
             # 判断文件名中是否包含"Overlay"或"_Sys"，若包含则删除该文件
             if "overlay" in filename.lower() or "_Sys" in filename:
-                os.remove(os.path.join(root, filename))
+                try:
+                    os.remove(os.path.join(root, filename))
+                except PermissionError:
+                    print(f"无法删除文件 {filename}，请检查你的文件权限或关闭占用该文件的程序。")
 
 
 def rename_apk(apk_files):
@@ -244,7 +260,7 @@ def rename_apk(apk_files):
             if not os.path.exists(os.path.join(output_dir, new_name)):
                 os.rename(apk_path, os.path.join(output_dir, new_name))
         except FileNotFoundError as e:
-            print('异常：缺失 aapt 环境，请先安装依赖后再重试')
+            print('异常：缺失 Android aapt 环境，请先安装依赖后重试')
             break
         except Exception as e:
             print(f"异常，报错信息: {e}")
