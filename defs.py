@@ -167,6 +167,9 @@ def extract_payload_bin(zip_files):
         except FileNotFoundError as e:
             print('异常：unzip 命令执行存在问题，请先检查运行环境后重试')
             break
+        except PermissionError:
+            print(f"无法解压文件 {f}，请检查你的文件权限或关闭占用该文件的程序。")
+            break
         except Exception as e:
             print(f"异常，报错信息: {e}")
 
