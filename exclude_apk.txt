@@ -42,6 +42,7 @@ MiuiCit.apk
 MiuiSecCamService.apk
 ModuleMetadata.apk
 Music.apk
+Nfc_st.apk
 NQNfcNci-v1.apk
 NQNfcNci.apk
 OTrPBroker.apk
