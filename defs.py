@@ -239,15 +239,15 @@ def remove_some_apk(exclude_apk):
 
 
 def rename_apk(apk_files):
-    # 遍历每个apk文件
+    # 遍历每个 apk 文件
     for apk_file in apk_files:
         apk_path = os.path.join(output_dir, apk_file)
 
         try:
-            # 使用apkfile库读取apk包信息
+            # 使用 apkfile 库读取 apk 包信息
             apk = ApkFile(apk_path)
 
-            # 获取apk的包名和版本号
+            # 获取 apk 的包名和版本号
             package_name = apk.package_name
             version_name = apk.version_name
             # version_code
@@ -256,7 +256,7 @@ def rename_apk(apk_files):
             # 构建新文件名
             new_name = f"{package_name}^{version_name}^{version_code}.apk"
 
-            # 重命名apk文件
+            # 重命名 apk 文件
             if not os.path.exists(os.path.join(output_dir, new_name)):
                 os.rename(apk_path, os.path.join(output_dir, new_name))
         except FileNotFoundError as e:
@@ -266,11 +266,11 @@ def rename_apk(apk_files):
             print(f"异常，报错信息: {e}")
 
 
-# 定义更新apk版本的函数，遍历输出目录下的apk文件，并更新本地词典
+# 定义更新 apk 版本的函数，遍历输出目录下的 apk 文件，并更新本地词典
 def update_apk_version(apk_version, apk_code, apk_code_name):
-    # 遍历输出目录下的apk文件
+    # 遍历输出目录下的 apk 文件
     for apk_file in os.listdir(output_dir):
-        # 如果文件名以".apk"结尾
+        # 如果文件名以 ".apk" 结尾
         if apk_file.endswith('.apk'):
             # 解析文件名，获取包名和版本号
             try:
