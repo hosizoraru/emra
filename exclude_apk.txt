@@ -38,7 +38,6 @@ MiShop.apk
 MiShopPad.apk
 MiTrustService.apk
 MiVoiceOpti.apk
-MiuiCit.apk
 MiuiSecCamService.apk
 ModuleMetadata.apk
 Music.apk
