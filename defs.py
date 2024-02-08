@@ -173,13 +173,7 @@ def extract_product_img():
     # -c 参数指定最大并发数为 8，-output 指定提取后的文件输出到 output_img 目录下
     # -p 参数指定提取 product 镜像，"payload.bin" 为输入文件
     subprocess.run(["./payload-dumper-go", "-c", "8", "-output",
-                    "output_img", "-p", "product", "payload.bin"])
-
-    # 循环遍历 output_img 目录下的所有文件，执行 os.rename 函数将提取的文件移动到当前目录下
-    for filename in os.listdir("output_img"):
-        src_path = os.path.join("output_img", filename)
-        dst_path = os.path.join(".", filename)
-        os.rename(src_path, dst_path)
+                    "./", "-p", "product", "payload.bin"])
 
 
 def extract_erofs_product():
