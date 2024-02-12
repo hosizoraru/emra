@@ -11,9 +11,6 @@ def init_folder():
     if not os.path.exists("output_apk"):
         os.mkdir("output_apk")
 
-    if not os.path.exists("output_img"):
-        os.mkdir("output_img")
-
     if not os.path.exists("update_apk"):
         os.mkdir("update_apk")
 
@@ -53,16 +50,10 @@ def extract_payload_bin(zip_files):
 
 def extract_product_img():
     # 使用subprocess模块运行shell命令，执行payload-dumper-go的命令，从payload.bin文件中提取product镜像文件
-    # -c参数指定最大并发数为8，-output指定提取后的文件输出到output_img目录下
+    # -c参数指定最大并发数为8，-output指定提取后的文件输出到脚本目录下
     # -p参数指定提取product镜像，"payload.bin"为输入文件
     subprocess.run(["./payload-dumper-go", "-c", "8", "-output",
-                    "output_img", "-p", "product", "payload.bin"])
-
-    # 循环遍历output_img目录下的所有文件，执行os.rename函数将提取的文件移动到当前目录下
-    for filename in os.listdir("output_img"):
-        src_path = os.path.join("output_img", filename)
-        dst_path = os.path.join(".", filename)
-        os.rename(src_path, dst_path)
+                    "./", "-p", "product", "payload.bin"])
 
 
 def extract_erofs_product():
@@ -174,7 +165,7 @@ def update_apk_name():
 def delete_files_and_folders():
     """删除指定的文件和文件夹"""
     files_to_delete = ["payload.bin", "product.img"]
-    folders_to_delete = ["output_img", "output_apk", "update_apk", "config"]
+    folders_to_delete = ["output_apk", "update_apk", "config"]
 
     for file in files_to_delete:
         if os.path.exists(file):
