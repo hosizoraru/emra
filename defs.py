@@ -105,9 +105,6 @@ def init_folder():
     if not os.path.exists("output_apk"):
         os.mkdir("output_apk")
 
-    if not os.path.exists("output_img"):
-        os.mkdir("output_img")
-
     if not os.path.exists("update_apk"):
         os.mkdir("update_apk")
 
@@ -374,7 +371,7 @@ def update_apk_name():
 def delete_files_and_folders():
     """删除指定的文件和文件夹"""
     files_to_delete = ["payload.bin", "product.img", "app_code_name.json"]
-    folders_to_delete = ["output_img", "output_apk", "update_apk", "update_name_apk", "config", "product"]
+    folders_to_delete = ["output_apk", "update_apk", "update_name_apk", "config", "product"]
 
     for file in files_to_delete:
         if os.path.exists(file):
