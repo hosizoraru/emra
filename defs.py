@@ -188,8 +188,8 @@ def extract_erofs_product():
             device_name = os.path.splitext(filename)[0]
 
             # 建立一个表单，用来判断是否为 Fold 或者 Pad
-            is_fold = {"cetus", "zizhan", "babylon"}
-            is_pad = {"nabu", "elish", "enuma", "dagu", "pipa", "liuqin", "yudi", "yunluo", "xun", "sheng"}
+            is_fold = {"cetus", "zizhan", "babylon", "goku"}
+            is_pad = {"nabu", "elish", "enuma", "dagu", "pipa", "liuqin", "yudi", "yunluo", "xun", "sheng", "dizi", "ruan"}
 
             for pad in is_pad:
                 if device_name == pad:
