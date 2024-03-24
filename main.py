@@ -15,6 +15,8 @@ def parse_arguments():
                         help='Extract product.img from payload.bin')
     parser.add_argument('-r', '--erofs', action='store_true',
                         help='Extract files from EROFS product.img')
+    parser.add_argument('-j', '--json', nargs=2, metavar=('Int', 'String'),
+                        help='Change the dictionary type (two parameters in total), 0/1 => backup/no backup, ph/f/p => phone/fold/tablet')
     parser.add_argument('-a', '--apk', action='store_true',
                         help='Remove specified APKs')
     parser.add_argument('-n', '--rename', action='store_true',
@@ -33,7 +35,7 @@ def main():
     args = parse_arguments()
 
     init_folder()
-    exclude_apk, apk_version = init_json()
+    exclude_apk, apk_version, apk_code, apk_code_name = init_json()
 
     if args.download:
         download_rom(args.download)
@@ -43,12 +45,14 @@ def main():
         extract_product_img()
     if args.erofs:
         extract_erofs_product()
+    if args.json:
+        move_json(args.json[0], args.json[1])
     if args.apk:
         remove_some_apk(exclude_apk)
     if args.rename:
         rename_apk(apk_files)
     if args.update_version:
-        update_apk_version(apk_version)
+        update_apk_version(apk_version, apk_code, apk_code_name)
     if args.update_name:
         update_apk_name()
     if args.clean:

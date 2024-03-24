@@ -15,8 +15,13 @@ output_dir = 'output_apk'
 
 update_apk_folder = "update_apk"
 
+update_apk_name_folder = "update_name_apk"
+
 if not os.path.exists(update_apk_folder):
     os.makedirs(update_apk_folder)
+
+if not os.path.exists(update_apk_name_folder):
+    os.makedirs(update_apk_name_folder)
 
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
@@ -24,7 +29,13 @@ if not os.path.exists(output_dir):
 # 获取名为"output_apk"目录中所有以".apk"为后缀的文件列表
 apk_files = [f for f in os.listdir(output_dir) if f.endswith('.apk')]
 
-# 定义了两个字符串常量，分别用于指定排除APK的文件路径和APK版本号和名称的JSON文件路径
+# 定义了两个字符串常量，分别用于指定排除 APK 的文件路径和 APK 版本号和名称的 JSON 文件路径
 EXCLUDE_APK_PATH = 'exclude_apk.txt'
 APK_VERSION = 'app_version.json'
+APK_CODE = 'app_code.json'
 APK_APP_NAME = 'app_name.json'
+APK_APP_NAME_PAD = 'app_name_pad.json'
+# 定义一个临时字典，用于存储版本名相同但版本号有所变更的 APK
+APK_CODE_NAME = 'app_code_name.json'
+# 定义字典类型
+JSON_V = 'app_json.txt'
