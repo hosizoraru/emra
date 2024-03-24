@@ -317,13 +317,24 @@ def update_apk_version(apk_version, apk_code, apk_code_name):
 
 
 def update_apk_name():
-    # 如果第二个词典文件存在，则读取其中的内容
-    if os.path.exists(APK_APP_NAME):
-        with open(APK_APP_NAME, 'r') as f:
-            apk_name = json.load(f)
-    # 如果第二个词典文件不存在，则将其设为空字典
-    else:
-        apk_name = {}
+    with open(JSON_V, 'r') as file:
+        line = file.readline()
+
+    # 判断当前字典库类别
+    if line == "Phone":
+        # 如果第二个词典文件存在，则读取其中的内容
+        if os.path.exists(APK_APP_NAME):
+            with open(APK_APP_NAME, 'r') as f:
+                apk_name = json.load(f)
+        # 如果第二个词典文件不存在，则将其设为空字典
+        else:
+            apk_name = {}
+    elif line == "Pad":
+        if os.path.exists(APK_APP_NAME_PAD):
+            with open(APK_APP_NAME_PAD, 'r') as f:
+                apk_name = json.load(f)
+        else:
+            apk_name = {}
 
     # 如果临时词典文件存在，则读取其中的内容
     if os.path.exists(APK_CODE_NAME):
